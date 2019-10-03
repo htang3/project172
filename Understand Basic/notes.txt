@@ -1,0 +1,119 @@
+24. How the Web works:
+ user enter some url.com to browser=>Domain Loop => send request to server
+ => Backend handle the requests(reaching to database)
+ => then, server sends response back to the user.
+ Request and response done in protocol, http or https
+
+ 25. Creating a Node Server
+ Core Modules: http-launch a server, send request
+ https - launch a SSL server,fs,path,os
+
+ To create a server: const sth= require('http')
+ const server = sth.createServer((req,res)=>{
+
+ })
+ server.listen(3000)//go to the browser enter localhost:3000 to see the output
+ in the terminal
+
+ 26***. The Nodejs Lifecycle and Event Loop
+ node app.js => Start Script => Parse code, register varibale and function
+ =>then enter Event loop(server keep listenning to the req)
+ Because the event is registered, so it keep running
+ Nodejs handle the server and execute one thread on our computer
+ Nodejs uses event loop concept where it always keep on running
+ and just executes when a certain event occurs.
+ Therefore, it keeps running to get the requests. 
+ In OS, it leverages os in multithread
+ process.exit to stop listenning
+
+ 28.Understand Requests
+ console.log(req.url, req.method) and so on to see the request.
+ 29. Sending Responses
+ res.write to write html code. 
+ res.end after this, we don write any more
+ in browser ctrl+shift I, check the network to see details
+ RELOADS and run node app.js everytime we update thing.
+
+ 30READ. Request and Response Headers
+ On both requests and responses, Http headers are added to transport metadata from A to B.
+The following article provides a great
+ overview of available headers and their role: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+
+ 31. Routing Requests(connect req and res)
+ check if the req.url matches with "/", if so, write the response
+
+ 32. Redirecting requests
+ if (url ==='/message' && method ==='POST'){
+        // redirect user 
+        fs.writeFileSync('message.txt','DUMMY',{});
+         res.writeHead(302,"inside writeHead", {'Location':'/'});
+        // res.statusCode = 302;
+        // res.setHeader('Location','/');
+        return res.end();
+redirect to the same page, check status 302.
+
+33.Parsing Request Bodies(Stream & Buffer)
+Stream is an on going process, request is read by node in chunk
+To organize income chunk, use Buffer. Buffer like bus stop, allow you to hold multiple chunk
+Get request data. req.on('data', (chunk)=>{
+        body.push(chunk); //push a new element on the body.
+
+})
+req.on('end',()=>{
+        const parseBody = Buffer.concat(body).toString();
+})
+34. Understanding Event Driven Code Execution.
+sending response does not mean event listener are dead
+it just called back to req.on(end) to be called sometimes in the future.
+Therefore it won't get execute. 
+
+35.Blocking and Non-Blocking Code
+writeFileSync(file,): will block code execution until the file is created.
+use writeFile instead: because accept the path, and it's asynchronous. So, other code can get executed.
+36. Looking Behind the scene
+Node uses single JS Thread
+Event Loop automatically start Event Loop(Handle Event Callbacks)
+fs sent to worker Pool(handle long file, have many threads)
+when worker is done, trigger callback to Event Loop.
+The Event Loop: keep the process running, handle all the callback
+check any timeout, check pending I/O, Poll(retrieve new I/O)
+Poll check any Timeout or I/O
+setImmediate get execute after finished open callbacks.
+Close callback: execute all 'close' event callbacks.
+if there no event handler, process.exit
+37. Using Node module system.
+create routes.js
+cut all the logic put into routes.js
+create requestHandler to wrap all the logic
+in routes: module.exports = {
+        handler: requestHandler
+}
+in app.js: require routes 
+const routes = require('./routes');
+38. Wrap up**********************
+How the web works: Client => Request => Server => Response=> Client
+Program Lifecycle: Nodejs run non-Blocking code and use event loop running logic
+A Node program exits as soon as there is no more work to do
+createServer() never finishes by default
+Request& response: parse request data in chunks, Stream and Buffer
+CoreModules: http, fs, path.... 
+use require("module") to import
+module.exports to export
+
+###############Section 4: Improved Development Workflow and Debugging**************
+41. Understand Npm Scripts
+in commanline, enter npm init, fill in the fields till finish.
+This will create a package.json.
+42. Installing 3rd party packages(COMES BACK HERE******)
+Your project
+Core Node Packages(http, fs....)
+Dependencies(3rd): express, body-parser....
+44. Using Nodemon for Autorestarts
+in package.js, modify "start": "nodemon app.js"
+46. Understanding errors
+Syntax Errors, Runtime Errors, Logical Errors.
+47. Finding syntax errors
+48. Runtime error 
+look at the error message in cmd and check the code
+49. Logical error
+
