@@ -1,29 +1,24 @@
-
+const path = require('path');
 
 const express = require('express');
-const path = require('path');
+const bodyParser = require('body-parser');
+
 const app = express();
-const bodyParser = require("body-parser");
-const adminRoutes = require("./Routes/admin");
-const shopRoute = require("./Routes/shop");
 
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-//bodyParser.urlencoded register a parser
-//extended to parse non default value
-app.use(bodyParser.urlencoded({extended:true}));
+const adminData = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-app.use('/admin',adminRoutes);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(shopRoute);
+app.use('/admin', adminData.routes);
+app.use(shopRoutes);
 
-//404 page
-app.use((req,res,next) => {
-    res.status(404).sendFile(path.join(__dirname,"Views","pageNotFound.html"));
-})
-
-
+app.use((req, res, next) => {
+  res.status(404).render('404', { pageTitle: 'Page Not Found' });
+});
 
 app.listen(3000);
-// const server = http.createServer(app);
-// //listen will keep listenning 
-// server.listen(3000);
