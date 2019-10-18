@@ -116,4 +116,75 @@ Syntax Errors, Runtime Errors, Logical Errors.
 48. Runtime error 
 look at the error message in cmd and check the code
 49. Logical error
+50.
+51.
+53.
 
+################Section 5: Working with Express.js#################
+57. What is Express.js?
+It makes easy to install another package. 
+We focus on Business Logic. Use a Framework for Heavy Lifting!
+Alternatives to Expressjs: Vanila Node.js, Adonis.js, Koa, Sails.js 
+58. Installing Express.js
+npm install --save express
+in app.js
+const express = require("express")
+const app = express()
+....createServer(app)
+59. Adding middleware
+Req-> Middleware->Middleware->Response
+split code into multiple blocks, 
+app.use(req,res,next) =>{
+
+}
+60. How Middleware works
+either calling next() or response
+We traveling from middleware to middleware, from top to bottom
+61. Look Behind the scene
+use app.listen(3000)
+replace const server = http.createServer();
+server.listen(3000)
+62.handling routes
+put MORE SPECIFIC URL ON THE TOP************
+app.use('/url',(rrn)=>{
+        res.send or next
+})
+63.Parsing Incoming Requests
+npm install --save body-parser
+const bodyParser = require('body-parser');
+bodyParser.urlencoded({extended: true});
+64. Limiting Middleware Execution to POST Requests
+app.post to fileter incoming post req
+app.get  //                    get
+we have app.path,......
+65. Using Express Router
+break our logic into different function
+add routes folder, shop.js, and admin.js 
+put app.use related product into admin. and '/' to shop.js
+import express for each file, express.Router, and export.
+
+66. Adding a 404 Error page
+app.use((req,res,next) => {
+    res.status(404).send('<h1>Page not found</h1>');
+})
+
+67. Filtering Paths
+Add /admin, adminRoutes
+in admin.js, add to form admin/add-product
+
+68.Create HTML page.
+Views folder, add-product.html and shop.html
+
+69.Serving HTML page
+in shop.js, import path by require('path')
+use res.sendFile(path.join(__dirname,"Views","shop.html"))
+70. Return page 404 not found
+in Views, create pageNotFound.html
+in app.js res.status(404.sendFile(__dirname,"Views","pageNotFound.html"))
+
+71. Using a Helper Funtion for Navigation
+use .. instead of ../
+Create utils folder
+path.js
+module.exports = path.dirname(process.mainModule.filename);
+in adminjs and shopjs, replace __dirname, "../" with dirROOT, imported on the top from utils/path
